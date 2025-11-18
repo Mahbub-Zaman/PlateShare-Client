@@ -67,27 +67,30 @@
 
 ## ⚙️ How It Works
 
-1. **Explore Skills:** Browse through skill categories and listings.  
-2. **Connect & Learn:** Click on a listing to see details and contact the skill provider.  
-3. **Exchange Skills:** Arrange sessions to learn or teach skills locally.  
-4. **Leave Feedback:** Rate and review your experience to help others in the community.  
-5. **Smooth Interactions:** Animations and notifications guide users through actions seamlessly.
+1. **Sign Up / Login:** Users create an account or log in to access the platform.  
+2. **Post Food Donations:** Donors can add food items they want to share, including details like quantity, description, and pickup time.  
+3. **Browse Food Listings:** Other users can browse available food items in their area.  
+4. **Request Food:** Users can request a donation they want. The donor will be notified of the request.  
+5. **Accept / Reject Requests:** Donors review incoming requests and can accept or reject them.  
+6. **Track Status:** Users can see the status of their requests and donations—accepted, rejected, or pending.  
+7. **Connect & Share:** Once a request is accepted, users coordinate pickup and enjoy sharing food, reducing waste in the community.  
+
 
 ---
 
-## 🔰 Installation & Setup
+## 💻 Installation & Setup
 
-**Follow these steps to set up SkillSwap locally:**
+Follow these steps to run the PlateShare project locally:
 
-1. **Clone this repository**  
+1. **Clone the repository:**  
 ```bash
-git clone https://github.com/programming-hero-web-course2/b12-a9-firesheild-Mahbub-Zaman
+git clone https://github.com/Mahbub-Zaman/PlateShare-Client.git
 ```
 
 2. **Navigate to the project folder**
 
 ```bash
-cd SkillSwap
+cd PlateShare-Client
 ```
 
 3. **Install dependencies**
@@ -95,8 +98,11 @@ cd SkillSwap
 ```bash
 npm install
 ```
+4. **Set up environment variables:**
+    * Create a `.env` file in the root directory.
+    * Add the required variables `(e.g., API URLs, JWT secret, etc.)`.
 
-4. **Start the development server**
+5. **Start the development server**
 
 ```bash
 npm run dev

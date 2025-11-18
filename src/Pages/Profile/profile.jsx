@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import { AuthContext } from "../../provider/AuthProvider";
 import { useNavigate } from "react-router-dom";
-import SkillCard from '../../components/SkillCard';
 
 const Profile = () => {
   const { user } = useContext(AuthContext);

@@ -30,7 +30,7 @@ const HowItWorks = () => {
   ];
 
   useEffect(() => {
-    AOS.init({ duration: 2000,once: false,
+    AOS.init({ duration: 1000,once: false,
     mirror: true,});
   }, []);
 
@@ -38,7 +38,7 @@ const HowItWorks = () => {
     <div className="max-w-6xl mx-auto px-4 py-16">
       <h2 className="text-3xl font-bold text-center text-green-500 mb-8">How It Works</h2>
 
-      <div data-aos="fade-up" className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
         {steps.map((step, index) => (
           <div
             key={index}

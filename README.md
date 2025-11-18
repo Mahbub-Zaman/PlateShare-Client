@@ -1,39 +1,43 @@
-# 🎓 SkillSwap – Local Skill Exchange Platform
+# 🎓 PlateShare – Community Food Sharing
 
-**SkillSwap** is an interactive platform designed for individuals to offer, learn, and trade skills within their local community. Whether you want guitar lessons, language exchange, coding help, or yoga training, SkillSwap allows you to browse listings, rate experiences, and connect with local skill providers effortlessly.
+**PlateShare**  is a full-stack MERN application designed to reduce food waste by connecting people who have surplus food with those in need. Users can easily post food items they wish to donate, while others can browse available items and submit requests to receive them. The platform fosters community engagement, promotes sustainability, and ensures that extra food reaches those who can benefit from it.
 
-![SkillSwap Preview](https://i.postimg.cc/hPSVm9rd/screencapture-skillswap-mahbub-netlify-app-2025-10-24-05-42-23.jpg)
+![SkillSwap Preview](https://i.ibb.co.com/JWwMGHk8/localhost-5174-2.png)
 
 ---
 
 ## 🔗 Live Demo
 
-🚀 [Click Here to Explore SkillSwap](https://skillswap-mahbub.netlify.app/)
+🚀 [Click Here to Explore PlateShare](#)
 
 ---
 
 ## 📲 App Features
 
-* **Browse & Discover Skills:** Explore a variety of local skills, classes, and services offered by community members.  
-* **Skill Listings:** Detailed listings with images, descriptions, ratings, and provider info.  
-* **Connect & Trade Skills:** Chat with skill providers or learners to exchange skills and arrange sessions.  
-* **Rating & Feedback:** Leave reviews and ratings to help others find quality skill providers.  
-* **User-Friendly Interface:** Simple, fast, and responsive design for an intuitive experience.  
-* **Animations & Interactivity:** Smooth animations and carousels using **AOS** and **Swiper**.  
-* **Notifications:** Get instant feedback on actions like booking or requesting skills using **react-hot-toast**.  
-* **UI Components:** Beautifully designed using **Tailwind CSS** and **DaisyUI**.
+* **Post Food Donations:** Easily share surplus food with the community by creating a donation listing.  
+* **Browse Available Food:** Explore a variety of food items posted by other users in your area.  
+* **Request Donations:** Request food items you need and connect with donors directly.  
+* **Donation Status Tracking:** Keep track of your requests and see when they are accepted or rejected.  
+* **User Profiles:** View donor and requester profiles to build trust within the community.  
+* **Reduce Food Waste:** Contribute to minimizing food waste while helping those in need.  
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **Frontend:** React.js  
-- **Styling & Components:** Tailwind CSS, DaisyUI  
-- **Animations:** AOS (Animate on Scroll)  
-- **Notifications:** react-hot-toast  
-- **Carousels & Sliders:** Swiper.js  
-- **Images:** Sourced from [Pexels](https://www.pexels.com/) and hosted on [PostImages](https://postimages.org/)  
-- **State Management:** React Hooks (useState, useEffect, etc.)
+* **Frontend:** React.js, Tailwind CSS, React Router, Axios  
+* **Backend:** Node.js, Express.js  
+* **Styling & Components:** Tailwind CSS, DaisyUI  
+* **Database:** MongoDB, Mongoose  
+* **Authentication:** JWT (JSON Web Tokens), bcrypt  
+* **Deployment:** Vercel / Netlify (frontend), Render / Heroku (backend)  
+* **Other Tools:** Postman (API testing), Git & GitHub (version control)
+* **Animations:** AOS (Animate on Scroll)  
+* **Notifications:** react-hot-toast , SweatAlert2
+* **Carousels & Sliders:** Swiper.js  
+* **Images:** Sourced from [Pexels](https://imgbb.com/) and hosted on [imgbb](https://imgbb.com/)  
+* **State Management:** React Hooks (useState, useEffect, etc.)
+* **Icons:** React Icon
 
 ---
 

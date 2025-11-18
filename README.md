@@ -115,5 +115,5 @@ npm run dev
 * Add **AI chatbot** 
 * Add **dark mode UI**  
 * Enable **booking and scheduling** features  
-* Implement persistent storage with **Firebase** or **MongoDB**  
+* Implement **google map** 
 

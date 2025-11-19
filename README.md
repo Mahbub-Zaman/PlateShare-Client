@@ -8,7 +8,7 @@
 
 ## 🔗 Live Demo
 
-🚀 [Click Here to Explore PlateShare](#)
+🚀 [Click Here to Explore PlateShare](https://plateshare-3f0ad.web.app/)
 
 ---
 

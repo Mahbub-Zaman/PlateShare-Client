@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import toast, { Toaster } from "react-hot-toast";
 
-const API_BASE = "http://localhost:3000";
+const API_BASE = "https://plateshare-api-server-beige.vercel.app";
 
 const FoodDetails = () => {
   const { user } = useAuth();

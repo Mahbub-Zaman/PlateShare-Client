@@ -6,7 +6,7 @@ const AllFoods = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:3000/foods")
+    fetch("https://plateshare-api-server-beige.vercel.app/foods")
       .then((res) => res.json())
       .then((data) => {
         // Filter only available foods
@@ -23,7 +23,7 @@ const AllFoods = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <p className="text-lg text-gray-700">Loading foods...</p>
+        <img src="/loader.gif" alt="loader" />
       </div>
     );
   }

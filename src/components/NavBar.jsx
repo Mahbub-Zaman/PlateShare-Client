@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { Link } from "react-router-dom";
 import useAuth from '../hooks/useAuth';
@@ -10,6 +10,16 @@ import { FiLogOut } from "react-icons/fi";
 const NavBar = () => {
     const { user, logOut } = useAuth();
     const navigate = useNavigate();
+
+      // Theme toggle state
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () => setTheme(theme === "light" ? "dark" : "light");
 
     const handleLogout = async () => {
         try {
@@ -32,11 +42,12 @@ const NavBar = () => {
                     <li><NavLink to="/createAProduct">My Food Requests</NavLink></li>
                 </>
             } */}
+            <li><NavLink to="/about">About</NavLink></li>
             <li><NavLink to="/faq">Faq</NavLink></li>
     </>
 
     return (
-    <div className="navbar bg-base-100 shadow-sm">
+    <div className="navbar secondary-bg shadow-sm">
         <div className="navbar-start">
             <div className="dropdown">
         <div tabIndex={0} className="btn btn-ghost lg:hidden">
@@ -68,14 +79,44 @@ const NavBar = () => {
         {links}
     </ul>
   </div>
-  <div className="navbar-end">
+
+  <div className="navbar-end flex">
+        <button
+        onClick={toggleTheme}
+        className={`relative w-10 h-10 rounded-full overflow-hidden shadow-inner 
+            ${theme === "light" ? "bg-white border border-gray-300 shadow-sm" : "bg-gray-700"}
+            transition-colors duration-500 mr-4`}
+        title="Toggle Light/Dark"
+        >
+          <div className="absolute inset-0 flex items-center justify-center">
+            <img
+              src="/light.png"
+              alt="Light Theme"
+              className={`transition-transform duration-500 ${
+                theme === "light"
+                  ? "translate-y-0 opacity-100"
+                  : "translate-y-6 opacity-0"
+              } w-6 h-6`}
+            />
+            <img
+              src="/dark.png"
+              alt="Dark Theme"
+              className={`absolute transition-transform duration-500 ${
+                theme === "dark"
+                  ? "translate-y-0 opacity-100"
+                  : "-translate-y-6 opacity-0"
+              } w-6 h-6`}
+            />
+          </div>
+        </button>
+
     {user ? (
         <>
             {/* User Info Tooltip */}
-            <div className="hidden lg:flex flex-col items-end mr-3">
+            {/* <div className="hidden lg:flex flex-col items-end mr-3">
                 <span className="text-sm font-semibold">{user.displayName || 'User'}</span>
                 <span className="text-xs text-gray-500">{user.email}</span>
-            </div>
+            </div> */}
 
             {/* User Avatar Dropdown */}
             <div className="dropdown dropdown-end">
@@ -118,6 +159,7 @@ const NavBar = () => {
                             Update Profile
                         </NavLink>
                     </li> */}
+                    <li><NavLink to="/dashboard">Dashboard</NavLink></li>
                     <li><NavLink to="/add-food">Add Food</NavLink></li>
                     <li><NavLink to="/manage-food">Manage My Foods</NavLink></li>
                     <li><NavLink to="/req-food">My Food Requests</NavLink></li>

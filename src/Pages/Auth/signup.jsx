@@ -64,7 +64,7 @@ const Signup = () => {
     };
 
     // 4️⃣ Send data to MongoDB
-    const response = await fetch("http://localhost:3000/users", {
+    const response = await fetch("https://plateshare-api-server-beige.vercel.app/users", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

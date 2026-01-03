@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import toast, { Toaster } from "react-hot-toast";
 
-const API_BASE = "http://localhost:3000"; // your backend base URL
+const API_BASE = "https://plateshare-api-server-beige.vercel.app"; // your backend base URL
 
 const ReqFood = () => {
   const { user } = useAuth();
@@ -100,7 +100,13 @@ const ReqFood = () => {
     }
   };
 
-  if (loading) return <p>Loading your requests...</p>;
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <img src="/loader.gif" alt="loader" />
+      </div>
+    );
+  }
   if (requests.length === 0) return <div className="flex flex-col items-center justify-center h-screen">
     <p className="text-red-500 font-bold text-4xl mb-8">
     Oops!

@@ -14,7 +14,7 @@ const ManageFood = () => {
   useEffect(() => {
     if (!user?.email) return;
 
-    fetch(`http://localhost:3000/foods?email=${user.email}`)
+    fetch(`https://plateshare-api-server-beige.vercel.app/foods?email=${user.email}`)
       .then((res) => res.json())
       .then((data) => {
         setFoods(data);
@@ -38,7 +38,7 @@ const ManageFood = () => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://localhost:3000/foods/${id}`, {
+        fetch(`https://plateshare-api-server-beige.vercel.app/foods/${id}`, {
           method: "DELETE",
         })
           .then((res) => res.json())

@@ -5,7 +5,7 @@ import { FaXTwitter } from "react-icons/fa6";
 const Footer = () => {
     return (
     <div>
-        <footer className="footer sm:footer-horizontal bg-gray-200 text-base-content p-10">
+        <footer className="footer sm:footer-horizontal secondary-bg text-base-content p-10">
                 {/* Company Info */}
                 <aside className="flex flex-col ml-0 md:ml-12">
                     <img src="/plateshare.png" alt="SkillSwap Logo" className="w-14 h-14 mb-2" />
@@ -51,7 +51,7 @@ const Footer = () => {
                     </div>
                 </nav>
             </footer>
-            <div className="w-full mt-0 bg-gray-200">
+            <div className="w-full mt-0 secondary-bg">
                 <hr className="border-gray-400" />
                 <p className="text-center text-sm p-2 text-gray-500">
                     &copy; {new Date().getFullYear()} All rights reserved by <span className='font-bold hover:text-[#1DA1F2]'>MD Mahbub Zaman</span>

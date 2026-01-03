@@ -11,7 +11,7 @@ const UpdateFood = () => {
 
   // Fetch existing food data
   useEffect(() => {
-    fetch(`http://localhost:3000/foods/${id}`)
+    fetch(`https://plateshare-api-server-beige.vercel.app/foods/${id}`)
       .then((res) => res.json())
       .then((data) => {
         setFood(data);
@@ -40,7 +40,7 @@ const UpdateFood = () => {
     };
 
     try {
-      const res = await fetch(`http://localhost:3000/foods/${id}`, {
+      const res = await fetch(`https://plateshare-api-server-beige.vercel.app/foods/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedFood),

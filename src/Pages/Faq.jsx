@@ -24,8 +24,40 @@ const Faq = () => {
       question: "How do I request a food item?",
       answer:
         "Browse available food posts near you, select the item you want, and send a request to the donor."
-    }
+    },
+    {
+      question: "How do I upload a food image?",
+      answer:
+        "Go to https://imgbb.com/ create an account, then upload your image. Copy Direct image url and paste it into your food image url."
+    },
+    {
+      question: "Why food image url shows error?",
+      answer:
+        "Upload image to imgbb, then copy the direct view link and paste the url. Your url must be like this https://i.ibb.co/ not https://i.ibb.co.com/"
+    },
   ];
+
+  const renderAnswerWithLinks = (text) => {
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+  return text.split(urlRegex).map((part, index) => {
+    if (part.match(urlRegex)) {
+      return (
+        <a
+          key={index}
+          href={part}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-green-600 font-medium underline hover:text-green-700"
+        >
+          {part}
+        </a>
+      );
+    }
+    return part;
+  });
+};
+
 
   const [openIndex, setOpenIndex] = useState(null);
 
@@ -38,7 +70,8 @@ const Faq = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-16">
+    <div className="secondary-bg">
+    <div className="max-w-4xl mx-auto px-4 py-22">
       <title>PlateShare | FAQ</title>
 
       <h1 className="text-4xl font-bold text-center mb-12">
@@ -51,22 +84,23 @@ const Faq = () => {
             key={index}
             data-aos="fade-up"
             data-aos-delay={index * 100}
-            className="bg-white p-5 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300"
+            className="primary-bg p-5 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300"
           >
             <div
               className="flex justify-between items-center cursor-pointer"
               onClick={() => toggleFAQ(index)}
             >
               <h3 className="text-lg font-semibold">{faq.question}</h3>
-              {openIndex === index ? <FaChevronUp /> : <FaChevronDown />}
+              {openIndex === index ? <FaChevronUp className="text-red-400" /> : <FaChevronDown className="text-green-500" />}
             </div>
 
             {openIndex === index && (
-              <p className="mt-3 text-gray-700">{faq.answer}</p>
+              <p className="mt-3 description">{renderAnswerWithLinks(faq.answer)}</p>
             )}
           </div>
         ))}
       </div>
+    </div>
     </div>
   );
 };

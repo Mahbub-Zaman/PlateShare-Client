@@ -54,7 +54,7 @@ const AddFood = () => {
 
 
       // Send to backend
-      const response = await fetch("http://localhost:3000/foods", {
+      const response = await fetch("https://plateshare-api-server-beige.vercel.app/foods", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(foodData),

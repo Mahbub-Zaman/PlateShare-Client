@@ -5,9 +5,51 @@
 @plugin "daisyui/theme" {
   name: "light";
   default: true;
-  --color-primary: #22c122;
+  --color-primary: #05df72;
   --color-secondary: teal;
+  --color-bg: #ffffff;
+  --color-bg-primary:#ffffff;
+  --color-bg-secondary:#E5E7EB;
+  --color-stat-bg: #ffffff;
+  --color-text: #424242;
+  --color-text-primary: #292922;
+  --color-text-secondary:#4B5563;
+  --color-heading: #292922;
+  --color-accent: #facc15;
 }
+
+@plugin "daisyui/theme" {
+  name: "dark";
+
+  --color-primary: #22c97a;
+  --color-secondary: #ffffff;
+  --color-bg: #121212;
+  --color-bg-primary: #1F2937;
+  --color-bg-secondary: #111827;
+  --color-stat-bg:#4B5563;
+  --color-text: #4d4d4d;
+  --color-text-primary: #E4E4E4;
+  --color-text-secondary:#9CA3AF;
+  --color-heading: #e4e4e4;
+  --color-accent: #f472b6;
+}
+.black {
+  color: var(--color-text-primary);
+}
+.description {
+  color: var(--color-text-secondary);
+}
+.primary-bg {
+  background-color: var(--color-bg-primary);
+}
+.secondary-bg {
+  background-color: var(--color-bg-secondary);
+}
+
+.stat-bg {
+  background-color: var(--color-stat-bg)
+}
+
 
 /* Purple color: text-purple-600 */
 

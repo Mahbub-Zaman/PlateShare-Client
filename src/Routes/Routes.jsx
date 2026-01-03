@@ -19,6 +19,9 @@ import UpdateFood from "../components/Restricted/UpdateFood";
 
 // Layout
 import MainLayout from "../Layouts/MainLayout";
+import About from "../Pages/About";
+import DashboardLayout from "../Layouts/DashboardLayout";
+import DashboardHome from "../Pages/Dashboard/DashboardHome";
 
 const router = createBrowserRouter([
   {
@@ -38,6 +41,7 @@ const router = createBrowserRouter([
       { path: "signup", element: <Signup /> },
       { path: "forgot-password", element: <ResetPassword /> },
       { path: "foods", element: <AllFoods /> },
+      { path: "about", element: <About /> },
       { path: "faq", element: <FAQPage /> },
 
       // Protected routes
@@ -96,6 +100,20 @@ const router = createBrowserRouter([
             <UpdateProfile />
           </PrivateRoute>
         ),
+      },
+    ],
+  },
+  {
+    path: "/dashboard",
+    element: (
+      <PrivateRoute>
+        <DashboardLayout />
+      </PrivateRoute>
+    ),
+    children: [
+      {
+        index: true,
+        element: <DashboardHome />,
       },
     ],
   },

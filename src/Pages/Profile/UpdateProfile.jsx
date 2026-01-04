@@ -1,11 +1,11 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../../provider/AuthProvider";
-import { updateEmail, updatePassword } from "firebase/auth";
+import { updateEmail, updatePassword, EmailAuthProvider, reauthenticateWithCredential } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast"; // npm install react-hot-toast
+import toast, { Toaster } from "react-hot-toast";
 
 const UpdateProfile = () => {
-  const { user, updateUserProfile, auth } = useContext(AuthContext);
+  const { user, updateUserProfile } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const [displayName, setDisplayName] = useState(user?.displayName || "");
@@ -14,28 +14,45 @@ const UpdateProfile = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // Reauthenticate user with current password
+  const reauthenticateUser = async (currentPassword) => {
+    const credential = EmailAuthProvider.credential(user.email, currentPassword);
+    await reauthenticateWithCredential(user, credential);
+  };
+
   const handleUpdate = async (e) => {
     e.preventDefault();
+    if (!user) {
+      toast.error("❌ No user logged in!");
+      return;
+    }
+
     setLoading(true);
 
     try {
-      // Update display name and photo
+      // 1️⃣ Update display name and photo
       await updateUserProfile({ displayName, photoURL });
 
-      // Update email if changed
+      // 2️⃣ Update email if changed
       if (email !== user.email) {
-        await updateEmail(auth.currentUser, email);
+        const currentPassword = prompt("Enter your current password to confirm email change:");
+        if (!currentPassword) throw new Error("Password is required for email change.");
+        await reauthenticateUser(currentPassword);
+        await updateEmail(user, email);
       }
 
-      // Update password if provided
+      // 3️⃣ Update password if provided
       if (password) {
-        await updatePassword(auth.currentUser, password);
+        const currentPassword = prompt("Enter your current password to confirm password change:");
+        if (!currentPassword) throw new Error("Password is required for password change.");
+        await reauthenticateUser(currentPassword);
+        await updatePassword(user, password);
       }
 
-      toast.success("✅ Profile updated successfully!"); // Show toast
-      setTimeout(() => navigate("/profile"), 1500);
+      toast.success("✅ Profile updated successfully!");
+      setTimeout(() => navigate("/dashboard/profile"), 1500);
     } catch (err) {
-      toast.error(err.message); // Show error toast
+      toast.error(`❌ ${err.message}`);
     } finally {
       setLoading(false);
     }
@@ -44,11 +61,11 @@ const UpdateProfile = () => {
   return (
     <div className="flex flex-col md:flex-row justify-center items-start gap-8 mt-10 max-w-5xl mx-auto">
       <title>PlateShare | Update Profile</title>
-      <Toaster position="top-right" reverseOrder={false} /> {/* Toast container */}
+      <Toaster position="top-right" reverseOrder={false} />
 
       {/* LEFT SIDE - Profile Preview */}
-      <div className="bg-white shadow-md rounded-lg p-6 w-full md:w-1/3 text-center">
-      <h2 className="text-2xl font-bold mb-6 border-b pb-2 text-gray-800">
+      <div className="secondary-bg shadow-md rounded-lg p-6 w-full md:w-1/3 text-center">
+        <h2 className="text-2xl font-bold mb-6 border-b pb-2 black">
           Profile Preview
         </h2>
         <img
@@ -69,14 +86,14 @@ const UpdateProfile = () => {
       </div>
 
       {/* RIGHT SIDE - Edit Form */}
-      <div className="bg-white shadow-md rounded-lg p-6 w-full md:w-2/3">
-        <h2 className="text-2xl font-bold mb-6 border-b pb-2 text-gray-800">
+      <div className="secondary-bg shadow-md rounded-lg p-6 w-full md:w-2/3">
+        <h2 className="text-2xl font-bold mb-6 border-b pb-2 black">
           Edit Profile
         </h2>
 
         <form onSubmit={handleUpdate} className="space-y-5">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium description mb-1">
               Full Name
             </label>
             <input
@@ -89,7 +106,7 @@ const UpdateProfile = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium description mb-1">
               Email Address
             </label>
             <input
@@ -102,7 +119,7 @@ const UpdateProfile = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium description mb-1">
               Profile Photo URL
             </label>
             <input
@@ -115,7 +132,7 @@ const UpdateProfile = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium description mb-1">
               New Password
             </label>
             <input

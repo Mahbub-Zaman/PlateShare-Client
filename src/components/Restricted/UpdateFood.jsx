@@ -49,7 +49,7 @@ const UpdateFood = () => {
       const data = await res.json();
       console.log("Update response:", data);
       toast.success("Food updated successfully!");
-      navigate("/manage-food");
+      navigate("/dashboard/manage-food");
     } catch (err) {
       console.error(err);
       toast.error("Failed to update food.");

@@ -4,29 +4,55 @@ import useAuth from "../../hooks/useAuth";
 import toast, { Toaster } from "react-hot-toast";
 import Swal from "sweetalert2";
 
+const API_BASE = "https://plateshare-api-server-beige.vercel.app";
+
 const ManageFood = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+
   const [foods, setFoods] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const limit = 5;
 
-  // Fetch foods added by the logged-in user
   useEffect(() => {
     if (!user?.email) return;
 
-    fetch(`https://plateshare-api-server-beige.vercel.app/foods?email=${user.email}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setFoods(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Error fetching user foods:", err);
-        setLoading(false);
-      });
-  }, [user?.email]);
+    const fetchFoods = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(
+          `${API_BASE}/foods?donator_email=${user.email}&page=${page}&limit=${limit}`
+        );
+        const data = await res.json();
 
-  // Delete food
+        if (!data) {
+          setFoods([]);
+          setTotalPages(1);
+        } else if (Array.isArray(data)) {
+          setFoods(data);
+          setTotalPages(1);
+        } else if (data.foods && Array.isArray(data.foods)) {
+          setFoods(data.foods);
+          setTotalPages(data.totalPages || 1);
+        } else {
+          setFoods([data]);
+          setTotalPages(1);
+        }
+      } catch (err) {
+        console.error("Error fetching foods:", err);
+        toast.error("Failed to fetch your foods.");
+        setFoods([]);
+        setTotalPages(1);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFoods();
+  }, [user?.email, page]);
+
   const handleDelete = (id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -36,35 +62,33 @@ const ManageFood = () => {
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
-        fetch(`https://plateshare-api-server-beige.vercel.app/foods/${id}`, {
-          method: "DELETE",
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            if (data.deletedCount > 0) {
-              toast.success("Food deleted successfully!");
-              setFoods(foods.filter((food) => food._id !== id));
-            }
-          })
-          .catch((err) => {
-            console.error(err);
+        try {
+          const res = await fetch(`${API_BASE}/foods/${id}`, { method: "DELETE" });
+          const data = await res.json();
+          if (data.deletedCount > 0) {
+            toast.success("Food deleted successfully!");
+            setFoods((prev) => prev.filter((food) => food._id !== id));
+          } else {
             toast.error("Failed to delete food.");
-          });
+          }
+        } catch (err) {
+          console.error(err);
+          toast.error("Failed to delete food.");
+        }
       }
     });
   };
 
-  // Navigate to update page
   const handleUpdate = (id) => {
-    navigate(`/update-food/${id}`);
+    navigate(`/dashboard/update-food/${id}`);
   };
 
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <p className="text-lg text-gray-700">Loading your foods...</p>
+        <img src="/loader.gif" alt="loader" />
       </div>
     );
   }
@@ -83,24 +107,35 @@ const ManageFood = () => {
         </p>
       ) : (
         <div className="overflow-x-auto">
-          <table className="table-auto w-full border-collapse border border-gray-300">
+          <table className="w-full table-auto border-collapse border border-gray-300">
             <thead>
-              <tr className="bg-gray-200">
-                <th className="border px-4 py-2">Food Name</th>
-                <th className="border px-4 py-2">Quantity</th>
-                <th className="border px-4 py-2">Pickup Location</th>
-                <th className="border px-4 py-2">Expire Date</th>
-                <th className="border px-4 py-2">Actions</th>
+              <tr className="secondary-bg text-left">
+                <th className="p-3">Image</th>
+                <th className="p-3">Food Name</th>
+                <th className="p-3">Quantity</th>
+                <th className="p-3">Pickup Location</th>
+                <th className="p-3">Expire Date</th>
+                <th className="p-3">Status</th>
+                <th className="p-3">Actions</th>
               </tr>
             </thead>
             <tbody>
               {foods.map((food) => (
-                <tr key={food._id} className="text-center">
-                  <td className="border px-4 py-2">{food.food_name}</td>
-                  <td className="border px-4 py-2">{food.food_quantity}</td>
-                  <td className="border px-4 py-2">{food.pickup_location}</td>
-                  <td className="border px-4 py-2">{food.expire_date}</td>
-                  <td className="border px-4 py-2 flex justify-center gap-2">
+                <tr key={food._id} className="hover:bg-secondary transition text-left">
+
+                  <td className="p-2">
+                    <img
+                      src={food.food_image}
+                      alt={food.food_name}
+                      className="w-16 h-16 object-cover rounded-lg"
+                    />
+                  </td>
+                  <td className="p-3 font-medium">{food.food_name}</td>
+                  <td className="p-3">{food.food_quantity}</td>
+                  <td className="p-3">{food.pickup_location}</td>
+                  <td className="p-3">{food.expire_date}</td>
+                  <td className="p-3">{food.food_status}</td>
+                  <td className="p-3 flex gap-2">
                     <button
                       onClick={() => handleUpdate(food._id)}
                       className="btn btn-sm btn-warning"
@@ -118,6 +153,25 @@ const ManageFood = () => {
               ))}
             </tbody>
           </table>
+
+          {/* Pagination */}
+          <div className="flex justify-end gap-2 mt-4">
+            <button
+              className="px-3 py-1 btn-primary rounded disabled:opacity-60"
+              onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+              disabled={page === 1}
+            >
+              Prev
+            </button>
+            <span className="px-3 py-1">{page}</span>
+            <button
+              className="px-3 py-1 btn-primary rounded disabled:opacity-60"
+              onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+              disabled={page === totalPages}
+            >
+              Next
+            </button>
+          </div>
         </div>
       )}
     </div>

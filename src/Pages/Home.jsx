@@ -5,6 +5,11 @@ import HowItWorks from '../components/Home/HowItWorks';
 import OurMission from '../components/Home/OurMission';
 import Why from "../components/Home/Why";
 import CTASection from "../components/Home/CTASection";
+import Statistics from "../components/Home/Statistics";
+import Testimonials from "../components/Home/Testimonials";
+import Blogs from "../components/Home/Blogs";
+import Newsletter from "../components/Home/Newsletter";
+import FAQ from "../components/Home/Faq";
 
 const Home = () => (
   <div>
@@ -28,6 +33,9 @@ const Home = () => (
     </div>
       <Why />
       <OurMission />
+      <Statistics />
+      <Testimonials />
+      <FAQ />
       <CTASection />
 
   </div>

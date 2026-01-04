@@ -1,3 +1,4 @@
+// AuthProvider.jsx
 import React, { createContext, useEffect, useState } from 'react';
 import {
     createUserWithEmailAndPassword,
@@ -18,44 +19,37 @@ const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // Google provider
     const googleProvider = new GoogleAuthProvider();
 
-    // Create user with email and password
     const createUser = (email, password) => {
         setLoading(true);
         return createUserWithEmailAndPassword(auth, email, password);
     };
 
-    // Sign in with email and password
     const signInUser = (email, password) => {
         setLoading(true);
         return signInWithEmailAndPassword(auth, email, password);
     };
 
-    // Sign in with Google
     const signInWithGoogle = () => {
         setLoading(true);
         return signInWithPopup(auth, googleProvider);
     };
 
-    // Update user profile
     const updateUserProfile = (profile) => {
+        if (!auth.currentUser) return Promise.reject(new Error("No user logged in"));
         return updateProfile(auth.currentUser, profile);
     };
 
-    // Reset password
     const resetPassword = (email) => {
         return sendPasswordResetEmail(auth, email);
     };
 
-    // Sign out
     const logOut = () => {
         setLoading(true);
         return signOut(auth);
     };
 
-    // Observer for auth state changes
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
@@ -65,9 +59,9 @@ const AuthProvider = ({ children }) => {
         return () => unsubscribe();
     }, []);
 
-    // Auth info to be shared
     const authInfo = {
         user,
+        auth, // <-- add auth here
         loading,
         createUser,
         signInUser,

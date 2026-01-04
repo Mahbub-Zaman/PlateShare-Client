@@ -4,7 +4,7 @@ import useAuth from "../../hooks/useAuth";
 import toast, { Toaster } from "react-hot-toast";
 
 const AddFood = () => {
-  const { user } = useAuth(); // Logged-in Firebase user
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   const [foodName, setFoodName] = useState("");
@@ -18,13 +18,7 @@ const AddFood = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Ensure user is logged in
-    if (!user) {
-      toast.error("You must be logged in to add food.");
-      return;
-    }
-
-    // Validate inputs
+    if (!user) return toast.error("You must be logged in to add food.");
     if (!foodName.trim()) return toast.error("Please provide a food name.");
     if (!imageUrl.trim()) return toast.error("Please provide a food image URL (must use ImgBB).");
     if (!imageUrl.includes("https://i.ibb.co/") && !imageUrl.includes("https://ibb.co/")) {
@@ -37,7 +31,6 @@ const AddFood = () => {
     setLoading(true);
 
     try {
-      // Prepare food data
       const foodData = {
         food_name: foodName,
         food_image: imageUrl,
@@ -52,8 +45,6 @@ const AddFood = () => {
         createdAt: new Date(),
       };
 
-
-      // Send to backend
       const response = await fetch("https://plateshare-api-server-beige.vercel.app/foods", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -66,7 +57,6 @@ const AddFood = () => {
       toast.success("✅ Food added successfully!");
       setLoading(false);
 
-      // Reset form
       setFoodName("");
       setImageUrl("");
       setQuantity("");
@@ -74,10 +64,7 @@ const AddFood = () => {
       setExpireDate("");
       setNotes("");
 
-      // Delay navigation to show toast
-      setTimeout(() => {
-        navigate("/");
-      }, 1500);
+      setTimeout(() => navigate("/"), 1500);
     } catch (err) {
       console.error(err);
       toast.error("Failed to add food. Try again.");
@@ -86,83 +73,105 @@ const AddFood = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center bg-gray-50">
-      <title>PlateShare | Add Food</title>
-      <Toaster position="top-right" reverseOrder={false} />
+    <div className="min-h-screen flex justify-center items-start p-6">
+      <Toaster position="top-right" />
+      <div className="secondary-bg shadow-2xl rounded-3xl p-8 max-w-3xl w-full space-y-6">
+        <h1 className="text-4xl font-bold text-center text-primary mb-4">Add New Food</h1>
+        <p className="text-center text-gray-500 mb-6">
+          Fill in the details to donate food and help others
+        </p>
 
-      <h1 className="text-4xl font-bold mb-6 text-center text-primary">Add Food</h1>
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-5">
+          {/* Food Name */}
+          <div className="flex flex-col">
+            <label className="font-medium mb-1 text-gray-700">Food Name</label>
+            <input
+              type="text"
+              value={foodName}
+              onChange={(e) => setFoodName(e.target.value)}
+              placeholder="e.g. Spaghetti Bolognese"
+              className="input input-bordered rounded-xl w-full p-3 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            />
+          </div>
 
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white shadow-md rounded-lg p-8 w-96 flex flex-col gap-4"
-      >
-        {/* Food Name */}
-        <input
-          type="text"
-          placeholder="Food Name"
-          value={foodName}
-          onChange={(e) => setFoodName(e.target.value)}
-          required
-          className="input"
-        />
+          {/* Image URL */}
+          <div className="flex flex-col">
+            <label className="font-medium mb-1 text-gray-700">Food Image URL</label>
+            <input
+              type="url"
+              value={imageUrl}
+              onChange={(e) => setImageUrl(e.target.value)}
+              placeholder="ImgBB URL"
+              className="input input-bordered rounded-xl w-full p-3 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            />
+            {imageUrl && (
+              <img
+                src={imageUrl}
+                alt="Food Preview"
+                className="mt-2 h-32 w-full object-cover rounded-xl shadow"
+              />
+            )}
+          </div>
 
-        {/* Image URL */}
-        <input
-          type="url"
-          placeholder="Food Image URL (must use ImgBB)"
-          value={imageUrl}
-          onChange={(e) => setImageUrl(e.target.value)}
-          required
-          className="input"
-        />
+          {/* Quantity */}
+          <div className="flex flex-col">
+            <label className="font-medium mb-1 text-gray-700">Quantity</label>
+            <input
+              type="number"
+              value={quantity}
+              onChange={(e) => setQuantity(e.target.value)}
+              placeholder="Number of people it serves"
+              className="input input-bordered rounded-xl w-full p-3 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            />
+          </div>
 
-        {/* Quantity */}
-        <input 
-          type="number"
-          placeholder="Food Quantity (e.g., 2)"
-          value={quantity}
-          onChange={(e) => setQuantity(e.target.value)}
-          required
-          className="input"
-        />
+          {/* Pickup Location */}
+          <div className="flex flex-col">
+            <label className="font-medium mb-1 text-gray-700">Pickup Location</label>
+            <input
+              type="text"
+              value={pickupLocation}
+              onChange={(e) => setPickupLocation(e.target.value)}
+              placeholder="e.g. 123 Main St, Dhaka"
+              className="input input-bordered rounded-xl w-full p-3 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            />
+          </div>
 
+          {/* Expire Date */}
+          <div className="flex flex-col">
+            <label className="font-medium mb-1 text-gray-700">Expire Date</label>
+            <input
+              type="date"
+              value={expireDate}
+              onChange={(e) => setExpireDate(e.target.value)}
+              className="input input-bordered rounded-xl w-full p-3 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            />
+          </div>
 
-        {/* Pickup Location */}
-        <input
-          type="text"
-          placeholder="Pickup Location"
-          value={pickupLocation}
-          onChange={(e) => setPickupLocation(e.target.value)}
-          required
-          className="input"
-        />
+          {/* Additional Notes */}
+          <div className="flex flex-col">
+            <label className="font-medium mb-1 text-gray-700">Additional Notes</label>
+            <textarea
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              placeholder="Any special instructions or info"
+              className="textarea textarea-bordered rounded-xl w-full p-3 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              rows={4}
+            />
+          </div>
 
-        {/* Expire Date */}
-        <input
-          type="date"
-          value={expireDate}
-          onChange={(e) => setExpireDate(e.target.value)}
-          required
-          className="input"
-        />
-
-        {/* Additional Notes */}
-        <textarea
-          placeholder="Additional Notes"
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
-          className="textarea"
-        />
-
-        {/* Submit */}
-        <button
-          type="submit"
-          disabled={loading}
-          className={`btn ${loading ? "btn-disabled" : "btn-primary"}`}
-        >
-          {loading ? "Adding..." : "Add Food"}
-        </button>
-      </form>
+          {/* Submit */}
+          <button
+            type="submit"
+            disabled={loading}
+            className={`btn w-full rounded-xl text-white text-lg font-semibold py-3 ${
+              loading ? "btn-disabled bg-gray-400" : "btn-primary"
+            }`}
+          >
+            {loading ? "Adding..." : "Add Food"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

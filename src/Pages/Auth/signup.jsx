@@ -18,100 +18,89 @@ const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // Password validation function
+  // Password validation
   const validatePassword = (password) => {
     if (password.length < 6) return "Password must be at least 6 characters long";
     if (!/[A-Z]/.test(password)) return "Password must include at least one uppercase letter";
     if (!/[a-z]/.test(password)) return "Password must include at least one lowercase letter";
     return "";
   };
-
   const handlePasswordChange = (e) => {
     const value = e.target.value;
     setPassword(value);
     setPasswordError(validatePassword(value));
   };
 
- const handleRegister = async (e) => {
-  e.preventDefault();
-  const terms = e.target.terms.checked;
+  // Save user to backend
+  const saveUserToBackend = async (user) => {
+    try {
+      const userData = {
+        name: user.displayName || name || "Anonymous",
+        email: user.email,
+        photoURL: user.photoURL || photoURL || null,
+        role: "User",
+        createdAt: new Date(),
+      };
 
-  if (passwordError) return;
-  if (!terms) {
-    setFormError("Please accept our terms and conditions");
-    return;
-  }
-
-  setFormError("");
-  setLoading(true);
-
-  try {
-    // 1️⃣ Create user in Firebase (no need to store return value if not needed)
-    await createUser(email, password);
-
-    // 2️⃣ Update Firebase profile
-    await updateUserProfile({
-      displayName: name || null,
-      photoURL: photoURL || null,
-    });
-
-    // 3️⃣ Prepare data for MongoDB
-    const userData = {
-      name,
-      email,
-      photoURL,
-      createdAt: new Date(),
-    };
-
-    // 4️⃣ Send data to MongoDB
-    const response = await fetch("https://plateshare-api-server-beige.vercel.app/users", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(userData),
-    });
-
-    const data = await response.json();
-    console.log("MongoDB response:", data);
-
-    toast.success("✅ Account created successfully! Welcome!");
-    
-    setLoading(false);
-
-    // 5️⃣ Reset form
-    e.target.reset();
-    setName("");
-    setEmail("");
-    setPhotoURL("");
-    setPassword("");
-    setPasswordError("");
-
-    navigate("/"); // redirect to Home page
-  } catch (err) {
-    console.error(err);
-    setLoading(false);
-    if (err.code === "auth/email-already-in-use") {
-      setFormError("This email is already registered. Please login instead.");
-    } else if (err.code === "auth/invalid-email") {
-      setFormError("Invalid email address.");
-    } else if (err.code === "auth/weak-password") {
-      setFormError("Password is too weak.");
-    } else {
-      setFormError(err.message || "Failed to create account");
+      await fetch("https://plateshare-api-server-beige.vercel.app/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userData),
+      });
+    } catch (err) {
+      console.error("Failed to save user to backend:", err);
     }
-  }
-};
-
-
-  const handleTogglePasswordShow = (e) => {
-    e.preventDefault();
-    setShowPassword(!showPassword);
   };
 
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    const terms = e.target.terms.checked;
+
+    if (passwordError) return;
+    if (!terms) {
+      setFormError("Please accept our terms and conditions");
+      return;
+    }
+
+    setFormError("");
+    setLoading(true);
+
+    try {
+      // Firebase create user
+      const userCredential = await createUser(email, password);
+      await updateUserProfile({ displayName: name, photoURL });
+
+      // Save to backend
+      await saveUserToBackend(userCredential.user);
+
+      toast.success("✅ Account created successfully!");
+      setLoading(false);
+
+      e.target.reset();
+      setName(""); setEmail(""); setPhotoURL(""); setPassword(""); setPasswordError("");
+
+      navigate("/"); // redirect
+    } catch (err) {
+      console.error(err);
+      setLoading(false);
+      if (err.code === "auth/email-already-in-use") {
+        setFormError("This email is already registered. Please login instead.");
+      } else if (err.code === "auth/invalid-email") {
+        setFormError("Invalid email address.");
+      } else if (err.code === "auth/weak-password") {
+        setFormError("Password is too weak.");
+      } else {
+        setFormError(err.message || "Failed to create account");
+      }
+    }
+  };
+
+  // Google signup
   const handleGoogleLogin = async () => {
     try {
-      await signInWithGoogle();
+      const userCredential = await signInWithGoogle();
+      await saveUserToBackend(userCredential.user);
+
       toast.success("✅ Signed in with Google successfully!");
       navigate("/");
     } catch (err) {
@@ -120,9 +109,14 @@ const Signup = () => {
     }
   };
 
+  const handleTogglePasswordShow = (e) => {
+    e.preventDefault();
+    setShowPassword(!showPassword);
+  };
+
   return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-gray-50">
-      <title>SkillSwap | Sign Up</title>
+      <title>PlateShare | Sign Up</title>
       <Toaster position="top-right" reverseOrder={false} />
       <h1 className="text-4xl font-bold mb-6 text-primary text-center">Create Your Account</h1>
 
@@ -217,7 +211,7 @@ const Signup = () => {
             onClick={handleGoogleLogin}
             className="w-full py-2 border border-gray-300 rounded-md bg-white flex items-center justify-center gap-2 hover:bg-gray-100"
           >
-            <FcGoogle className="text-xl" /> {/* Google icon */}
+            <FcGoogle className="text-xl" />
             Sign up with Google
           </button>
         </div>

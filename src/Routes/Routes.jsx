@@ -22,6 +22,13 @@ import MainLayout from "../Layouts/MainLayout";
 import About from "../Pages/About";
 import DashboardLayout from "../Layouts/DashboardLayout";
 import DashboardHome from "../Pages/Dashboard/DashboardHome";
+import ManageFoods from "../Pages/Admin/ManageFood";
+import ManageUsers from "../Pages/Admin/ManageUsers;";
+import AdminStats from "../Pages/Admin/AdminStats";
+import ActivityPage from "../Pages/Admin/ActivityPage";
+import Test from "../Pages/Dashboard/Test";
+import MyRequests from "../Pages/Restricted/MyRequests";
+import AdminRoute from "./AdminRoute";
 
 const router = createBrowserRouter([
   {
@@ -48,10 +55,46 @@ const router = createBrowserRouter([
       {
         path: "food/:id",
         element: (
-          <PrivateRoute>
             <FoodDetails />
+        ),
+      },
+      {
+        path: "profile",
+        element: (
+          <PrivateRoute>
+            <Profile />
           </PrivateRoute>
         ),
+      },
+      // {
+      //   path: "update-profile",
+      //   element: (
+      //     <PrivateRoute>
+      //       <UpdateProfile />
+      //     </PrivateRoute>
+      //   ),
+      // },
+      {
+        path: "my-requests",
+        element: (
+          <PrivateRoute>
+            <MyRequests />
+          </PrivateRoute>
+        ),
+      },
+    ],
+  },
+  {
+    path: "/dashboard",
+    element: (
+      <PrivateRoute>
+        <DashboardLayout />
+      </PrivateRoute>
+    ),
+    children: [
+      {
+        index: true,
+        element: <DashboardHome />,
       },
       {
         path: "add-food",
@@ -62,6 +105,12 @@ const router = createBrowserRouter([
         ),
       },
       {
+        path: "food/:id",
+        element: (
+            <FoodDetails />
+        ),
+      },
+      { //for user
         path: "manage-food",
         element: (
           <PrivateRoute>
@@ -86,6 +135,50 @@ const router = createBrowserRouter([
         ),
       },
       {
+        path: "my-requests",
+        element: (
+          <PrivateRoute>
+            <MyRequests />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "manage-users",
+        element: (
+          <AdminRoute>
+            <ManageUsers/>
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "manage-foods",
+        element: (
+          <AdminRoute>
+            <ManageFoods />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "stats",
+        element: (
+          <AdminRoute>
+            <AdminStats/>
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "activity",
+        element: (
+          <AdminRoute>
+            <ActivityPage />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "test",
+        element: <Test />
+      },
+      {
         path: "profile",
         element: (
           <PrivateRoute>
@@ -100,20 +193,6 @@ const router = createBrowserRouter([
             <UpdateProfile />
           </PrivateRoute>
         ),
-      },
-    ],
-  },
-  {
-    path: "/dashboard",
-    element: (
-      <PrivateRoute>
-        <DashboardLayout />
-      </PrivateRoute>
-    ),
-    children: [
-      {
-        index: true,
-        element: <DashboardHome />,
       },
     ],
   },

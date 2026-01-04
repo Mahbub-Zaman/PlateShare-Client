@@ -130,7 +130,7 @@ const ReqFood = () => {
       <Toaster position="top-right" />
       <h1 className="text-3xl font-bold mb-6 text-green-500 text-center">My Food Requests</h1>
       <table className="table w-full">
-        <thead className="bg-green-200">
+        <thead className="bg-green-200 text-black">
           <tr>
             <th>SL</th>
             <th>Food Image</th>
@@ -145,7 +145,7 @@ const ReqFood = () => {
             <th>Action</th>
           </tr>
         </thead>
-        <tbody className="bg-gray-100">
+        <tbody className="secondary-bg">
           {requests.map((req, index) => (
             <tr key={req._id}>
               <td>{index + 1}</td>

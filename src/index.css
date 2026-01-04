@@ -6,7 +6,7 @@
   name: "light";
   default: true;
   --color-primary: #05df72;
-  --color-secondary: teal;
+  --color-secondary: #F3F4F6;
   --color-bg: #ffffff;
   --color-bg-primary:#ffffff;
   --color-bg-secondary:#E5E7EB;
@@ -22,7 +22,7 @@
   name: "dark";
 
   --color-primary: #22c97a;
-  --color-secondary: #ffffff;
+  --color-secondary: teal;
   --color-bg: #121212;
   --color-bg-primary: #1F2937;
   --color-bg-secondary: #111827;
